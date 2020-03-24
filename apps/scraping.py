@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import datetime as dt
 
+
 def scrape_all():
     # Initiate headless driver for deployment
     browser = Browser("chrome", executable_path="chromedriver", headless=True)
@@ -13,8 +14,7 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now(),
-        "hemispheres": hemisphere_image(browser)
+        "last_modified": dt.datetime.now()
     }
     # Quit browser in case it's not in headless mode
     browser.quit()
@@ -82,7 +82,9 @@ def mars_facts():
     return df.to_html(index=False)
     
 #### Hemisphere Mars Images
-def hemisphere_image(browser):
+def hemisphere_image():
+    # Initiate headless driver for deployment
+    browser = Browser("chrome", executable_path="chromedriver", headless=True)
     # Visit URL
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(url)
@@ -100,7 +102,7 @@ def hemisphere_image(browser):
         absolute_link = f'https://astrogeology.usgs.gov{relative_link}'
         hemi_page_links.append(absolute_link)    
         # Declare dictionary to hold correcponding data for each image
-        img_dic = []
+        img_dic = {}
     # Click through four hemisphere pages and parse data
     for hemi_page_link in hemi_page_links:
         # Open the page for each hemisohere image
@@ -108,20 +110,24 @@ def hemisphere_image(browser):
         # Parse the resulting html with soup
         html = browser.html
         soup = BeautifulSoup(html, 'html.parser')
+        # Declare list lement iterator
+        i = hemi_page_links.index(hemi_page_link)
         try:
-            img_item = {}
             # Parse image title with soup
-            img_item["Img_title"] = soup.find("h2", class_="title").get_text()
+            img_title = soup.find("h2", class_="title").get_text()
             # Parse sample image URL with soup
-            img_item["Img_URL"] = soup.find("a", text="Sample").get("href")
+            img_url = soup.find("a", text="Sample").get("href")
             # Add image URL and title to image dictionary
-            img_dic.append(img_item)
+            img_dic.update({"Img_title"+str(i) : img_title})
+            img_dic.update({"Img_url"+str(i) : img_url})
         except AttributeError:
             return None, None
+    # Quit browser in case it's not in headless mode
+    browser.quit()
     return img_dic
 
 
 if __name__ == "__main__":
     # If running as script, print scraped data
-    #scrape_all()
     print(scrape_all())
+    print(hemisphere_image())

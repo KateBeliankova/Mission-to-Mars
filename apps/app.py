@@ -17,6 +17,8 @@ def index():
 def scrape():
    mars = mongo.db.mars
    mars_data = scraping.scrape_all()
+   mars_data2 = scraping.hemisphere_image()
+   mars_data.update(mars_data2)
    mars.update({}, mars_data, upsert=True)
    return "Scraping Successful!"
 
