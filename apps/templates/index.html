@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!-- Mars News -->  
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Mission to Mars</title>
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        />
+        <style>
+                .jumbotron {
+                    background-image: url("https://mars.nasa.gov/system/resources/detail_files/22122_PIA22100.png");
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    height: 650px; 
+                }
+                .btn {
+                    position:relative;
+                    margin-top: 43%;
+                }
+        </style>        
+    </head>
+    <body> 
+        <div class="container">
+            <section class="jumbotron text-center">
+                <h1 style="color:white; font-size:58px">Mission to Mars</h1>
+                <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
+            </section> 
+                <div class="row" id="mars-news">
+                    <div class="col-md-12">
+                        <div class="media">
+                            <div class="media-body">
+                            <h2>Latest Mars News</h2>
+                            <h4>{{mars.news_title}}</h4>
+                            <p>{{ mars.news_paragraph }}</p>            
+                        </div>
+                    </div>
+                </div>
+           
+            <!-- Featured Image --> 
+            <div class="row" id="mars-featured-image">
+                <div class="col-md-8">
+                    <h2>Featured Mars Image</h2>
+                    <!-- if images is False/None/non-existent, then default to error message -->
+                    <img 
+                        src="{{mars.featured_image}}"
+                        class="img-responsive"
+                        alt="Responsive image"
+                    />
+                </div>
+                <!-- Mars Facts -->
+                <div class="col-md-4">
+                    <div class="row" id="mars-facts">
+                        <div class="col-md-12">
+                            <h4>Mars Facts</h4>
+                                {{ mars.facts | safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="mars-hemisphere-images">
+                <div class="col-md-8">
+                    <h2>{{mars.hemisphere_image_title}}</h2>
+                    <!-- if images is False/None/non-existent, then default to error message -->
+                    <img
+                        src="{{mars.hemisphere_img_link}}"
+                        class="img-responsive"
+                        alt="Hemisphere image"
+                    />
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
